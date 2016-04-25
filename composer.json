@@ -1,0 +1,25 @@
+{
+    "name": "krak/lex",
+    "description": "Functional Lexing library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "RJ Garcia",
+            "email": "rj@bighead.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Krak\\Lex\\": "src"
+        },
+        "files": ["src/inc.php"]
+    },
+    "require": {
+        "krak/coll": "^0.1.0",
+        "nikic/iter": "^1.3"
+    },
+    "require-dev": {
+        "peridot-php/peridot": "^1.18"
+    }
+}
