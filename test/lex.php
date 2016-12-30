@@ -1,12 +1,14 @@
 <?php
 
-use Krak\Lex\MatchedToken;
+use Krak\Lex\TokenStream,
+    Krak\Lex\MatchedToken;
 
 use function Krak\Lex\lexer,
     Krak\Lex\skipLexer,
-    Krak\Lex\mockLexer;
+    Krak\Lex\mockLexer,
+    Krak\Lex\tokenStreamLexer;
 
-describe('Lex', function() {
+describe('Krak Lex', function() {
     describe('#mockLexer', function() {
         it('creates a lexer that returns whatever was passed', function() {
             $lex = mockLexer('a');
@@ -47,6 +49,25 @@ describe('Lex', function() {
                 $toks[2]->token == 'a' &&
                 $toks[2]->offset == 3
             );
+        });
+    });
+    describe('#tokenStreamLexer', function() {
+        it('returns an instance of TokenStream', function() {
+            $gen = function() { yield 'a'; yield 'b'; };
+            $lex = mockLexer($gen());
+            $lex = tokenStreamLexer($lex);
+            $toks = $lex('');
+            assert($toks instanceof TokenStream);
+        });
+    });
+    describe('TokenStream IterTokenStream', function() {
+        it('implements a token stream from an Iterator', function() {
+            $gen = function() { yield 'a'; yield 'b'; };
+            $stream = new TokenStream\IterTokenStream($gen());
+
+            assert($stream->peek() == $stream->getToken());
+            $stream->getToken();
+            assert($stream->isEmpty());
         });
     });
 });

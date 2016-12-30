@@ -51,6 +51,13 @@ function skipLexer($lex, $tokens) {
     };
 }
 
+/** converts the lex output into a token stream */
+function tokenStreamLexer($lex) {
+    return function($input) use ($lex) {
+        return new TokenStream\IterTokenStream($lex($input));
+    };
+}
+
 function mockLexer($tokens) {
     return function($input) use ($tokens) {
         return $tokens;
