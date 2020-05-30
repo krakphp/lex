@@ -2,9 +2,6 @@
 
 namespace Krak\Lex;
 
-use Krak\Coll\Set;
-use function iter\filter;
-
 function _match_token($token_map, $input, $offset) {
     $matches = [];
     foreach ($token_map as $re => $token) {
@@ -39,15 +36,13 @@ function lexer($token_map, $throw = true) {
     };
 }
 
-function skipLexer($lex, $tokens) {
-    if ($tokens instanceof Set\ConstSet == false) {
-        $tokens = Set\ArraySet::create($tokens);
-    }
-
+function skipLexer(callable $lex, array $tokens) {
     return function($input) use ($lex, $tokens) {
-        return filter(function($mtok) use ($tokens) {
-            return !$tokens->has($mtok->token);
-        }, $lex($input));
+        foreach ($lex($input) as $mtok) {
+            if (!in_array($mtok->token, $tokens)) {
+                yield $mtok;
+            }
+        }
     };
 }
 

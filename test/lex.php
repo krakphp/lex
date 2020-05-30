@@ -8,6 +8,8 @@ use function Krak\Lex\lexer,
     Krak\Lex\mockLexer,
     Krak\Lex\tokenStreamLexer;
 
+use Krak\Fun\{f, c};
+
 describe('Krak Lex', function() {
     describe('#mockLexer', function() {
         it('creates a lexer that returns whatever was passed', function() {
@@ -24,8 +26,7 @@ describe('Krak Lex', function() {
             ]);
             $lex = skipLexer($lex, ['b']);
 
-            $toks = iter\map(function($mtok) { return $mtok->token; }, $lex(''));
-            $toks = iter\toArray($toks);
+            $toks = f\arrayMap(function($mtok) { return $mtok->token; }, $lex(''));
             assert($toks == ['a', 'c']);
         });
     });
@@ -36,7 +37,7 @@ describe('Krak Lex', function() {
                 '/b+/A' => 'b',
             ]);
             $toks = $lex('abbaaa');
-            $toks = iter\toArray($toks);
+            $toks = f\toArray($toks);
 
             assert(
                 $toks[0]->match == 'a' &&
